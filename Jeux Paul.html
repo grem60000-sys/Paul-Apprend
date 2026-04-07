@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🌟 Paul Apprend !</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#FFFBF0;--yellow:#FFD93D;--orange:#FF6B35;--teal:#00C9B1;
+  --purple:#8B5CF6;--pink:#F472B6;--blue:#3B82F6;--green:#22C55E;
+  --red:#EF4444;--dark:#1E293B;--mid:#64748B;--light:#F1F5F9;
+  --shadow:0 8px 32px rgba(0,0,0,.12);--shadow-sm:0 4px 16px rgba(0,0,0,.09);
+  --r:22px;--font:'Lexend','Helvetica Neue',Arial,sans-serif;
+}
+html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--dark);-webkit-tap-highlight-color:transparent;overflow:hidden}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;padding:16px 16px 28px;opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;transform:translateY(16px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.screen.active{opacity:1;pointer-events:all;transform:translateY(0)}
+#starBadge{position:fixed;top:14px;right:14px;background:white;border-radius:100px;padding:8px 16px;font-size:18px;font-weight:800;color:var(--orange);box-shadow:var(--shadow-sm);z-index:999;display:flex;align-items:center;gap:6px}
+#starBadge.pop{animation:starPop .3s ease}
+@keyframes starPop{0%,100%{transform:scale(1)}50%{transform:scale(1.28)}}
+#home{background:linear-gradient(145deg,#FFD93D 0%,#FF6B35 100%);align-items:center;justify-content:center;gap:20px;text-align:center}
+.home-big{font-size:clamp(38px,9vw,68px);font-weight:800;color:white;line-height:1.1;text-shadow:0 4px 0 rgba(0,0,0,.12)}
+.home-sub{font-size:clamp(15px,3.5vw,20px);font-weight:600;color:rgba(255,255,255,.92)}
+.cats-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.cat-badge{background:rgba(255,255,255,.25);border-radius:100px;padding:6px 14px;font-size:13px;font-weight:700;color:white}
+.progress-row{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;max-width:320px}
+.progress-label{font-size:14px;font-weight:700;color:rgba(255,255,255,.92)}
+.progress-track{width:100%;height:14px;background:rgba(255,255,255,.35);border-radius:100px;overflow:hidden}
+.progress-fill{height:100%;background:white;border-radius:100px;transition:width .6s ease}
+.float-anim{animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.btn{font-family:var(--font);border:none;border-radius:100px;cursor:pointer;font-weight:800;letter-spacing:.04em;transition:transform .12s,box-shadow .12s;display:inline-flex;align-items:center;gap:8px;justify-content:center}
+.btn:active{transform:translateY(3px)}
+.btn-xl{background:white;color:var(--orange);padding:18px 48px;font-size:clamp(20px,5vw,26px);box-shadow:0 8px 0 rgba(0,0,0,.14)}
+.btn-xl:active{box-shadow:0 4px 0 rgba(0,0,0,.14)}
+.btn-back{background:white;color:var(--dark);padding:10px 20px;font-size:16px;box-shadow:var(--shadow-sm);align-self:flex-start;margin-bottom:4px;flex-shrink:0}
+.btn-sound{background:var(--teal);color:white;padding:11px 20px;font-size:17px;box-shadow:0 4px 0 rgba(0,0,0,.12)}
+.btn-nav{background:white;color:var(--dark);width:52px;height:52px;font-size:22px;border-radius:50%;box-shadow:var(--shadow-sm);padding:0}
+.btn-nav:disabled{opacity:.3;pointer-events:none}
+.btn-white{background:white;color:var(--dark);padding:14px 30px;font-size:18px;box-shadow:0 6px 0 rgba(0,0,0,.12)}
+#modes{gap:12px;padding-top:10px}
+.modes-cat-sel{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.cat-btn{font-family:var(--font);border:2.5px solid #E2E8F0;background:white;border-radius:100px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;color:var(--mid);transition:all .18s}
+.cat-btn.active{background:var(--dark);color:white;border-color:var(--dark)}
+.modes-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mode-tile{background:white;border-radius:var(--r);padding:18px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;text-align:center;box-shadow:var(--shadow-sm);border:3px solid transparent;transition:transform .15s;font-family:var(--font)}
+.mode-tile:active{transform:scale(.95)}
+.mode-tile .ico{font-size:40px}
+.mode-tile .name{font-size:15px;font-weight:800;color:var(--dark)}
+.mode-tile .desc{font-size:11px;font-weight:400;color:var(--mid);line-height:1.5}
+.m1{border-color:var(--blue)}.m2{border-color:var(--green)}.m3{border-color:var(--purple)}.m4{border-color:var(--orange)}.m5{border-color:var(--pink)}.m6{border-color:var(--teal)}
+#flashcard{gap:10px}
+.fc-counter{text-align:center;font-size:15px;font-weight:700;color:var(--blue)}
+.fc-cat-tag{text-align:center;font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.1em}
+.fc-area{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
+.fc-wrap{width:100%;max-width:420px;perspective:1200px;touch-action:pan-y;user-select:none}
+.fc-inner{position:relative;width:100%;padding-top:75%;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1)}
+.fc-inner.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;border-radius:28px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.fc-front{background:white}
+.fc-back{transform:rotateY(180deg);background:linear-gradient(135deg,#6366F1,#8B5CF6);color:white}
+.fc-emoji{font-size:clamp(50px,12vw,72px);line-height:1}
+.fc-word-en{font-size:clamp(24px,6vw,40px);font-weight:800;color:var(--blue)}
+.fc-word-fr{font-size:clamp(20px,5vw,34px);font-weight:800;color:white;text-align:center}
+.fc-phon{font-size:14px;color:#94A3B8;font-style:italic}
+.fc-hint{font-size:12px;color:#94A3B8}
+.fc-badge{background:rgba(255,255,255,.25);border-radius:100px;padding:4px 14px;font-size:11px;font-weight:700;letter-spacing:.08em}
+.fc-controls{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-shrink:0}
+.fc-sound-row{display:flex;gap:10px;justify-content:center;flex-shrink:0}
+#quiz{gap:10px}
+.quiz-header{display:flex;justify-content:space-between;align-items:center}
+.quiz-prog{font-size:14px;font-weight:700;color:var(--mid)}
+.quiz-score-disp{font-size:18px;font-weight:800;color:var(--green)}
+.quiz-q-card{background:white;border-radius:var(--r);box-shadow:var(--shadow-sm);padding:16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0}
+.quiz-q-label{font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.08em}
+.quiz-q-emoji{font-size:clamp(46px,11vw,64px);line-height:1}
+.quiz-q-word{font-size:clamp(20px,5vw,30px);font-weight:800;color:var(--dark)}
+.quiz-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.quiz-opt{font-family:var(--font);background:white;border:3px solid #E2E8F0;border-radius:16px;padding:13px 8px;font-size:clamp(14px,3.5vw,18px);font-weight:700;cursor:pointer;text-align:center;color:var(--dark);line-height:1.25;transition:all .18s;min-height:60px}
+.quiz-opt.correct{background:var(--green);border-color:#16A34A;color:white;animation:boing .35s ease}
+.quiz-opt.wrong{background:var(--red);border-color:#DC2626;color:white}
+@keyframes boing{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.quiz-feedback{text-align:center;font-size:20px;font-weight:800;min-height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#memory{gap:10px}
+.mem-info{display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:var(--purple)}
+.mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.mem-tile{background:var(--purple);border-radius:12px;aspect-ratio:.85;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:clamp(13px,3vw,18px);font-weight:800;font-family:var(--font);color:white;box-shadow:0 4px 10px rgba(139,92,246,.3);transition:all .25s;text-align:center;padding:4px;line-height:1.2;overflow:hidden}
+.mem-tile .q-icon{font-size:clamp(20px,5vw,28px)}
+.mem-tile.open{background:#EEF2FF;color:var(--dark);box-shadow:0 4px 14px rgba(0,0,0,.1);transform:scale(1.04)}
+.mem-tile.done{background:var(--green);color:white;box-shadow:0 4px 10px rgba(34,197,94,.3)}
+#match{gap:10px}
+.match-header{display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.match-title{font-size:clamp(17px,4vw,22px);font-weight:800}
+.match-score{font-size:16px;font-weight:700;color:var(--pink)}
+.match-cols{display:flex;gap:10px;flex:1}
+.match-col{flex:1;display:flex;flex-direction:column;gap:7px}
+.match-col-label{text-align:center;font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.08em;padding-bottom:2px;flex-shrink:0}
+.match-item{background:white;border-radius:14px;padding:10px 6px;text-align:center;cursor:pointer;font-size:clamp(14px,3.2vw,18px);font-weight:800;font-family:var(--font);box-shadow:var(--shadow-sm);border:3px solid transparent;transition:all .18s;min-height:54px;display:flex;align-items:center;justify-content:center;line-height:1.3}
+.match-item.sel{border-color:var(--blue);background:#EFF6FF;transform:scale(1.04)}
+.match-item.ok{border-color:var(--green);background:#F0FDF4;color:var(--green);pointer-events:none}
+.match-item.ko{border-color:var(--red);background:#FEF2F2;animation:shake .3s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.match-feedback{text-align:center;font-size:18px;font-weight:800;min-height:32px;flex-shrink:0}
+#spelling{gap:8px}
+.spell-header{display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.spell-prog{font-size:14px;font-weight:700;color:var(--mid)}
+.spell-score{font-size:18px;font-weight:800;color:var(--teal)}
+.spell-card{background:white;border-radius:var(--r);box-shadow:var(--shadow-sm);padding:14px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0}
+.spell-emoji{font-size:clamp(44px,10vw,60px);line-height:1}
+.spell-fr{font-size:clamp(17px,4.5vw,24px);font-weight:800;color:var(--dark)}
+.spell-hint{font-size:12px;color:var(--mid)}
+.spell-slots{display:flex;justify-content:center;flex-wrap:wrap;gap:4px;min-height:52px;align-items:center;flex-shrink:0}
+.spell-slot{width:clamp(34px,8vw,44px);height:clamp(40px,9vw,52px);background:#F8FAFC;border-radius:9px;border:2.5px dashed #CBD5E1;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,4vw,21px);font-weight:800;font-family:var(--font);color:var(--dark);transition:all .2s}
+.spell-slot.filled{background:var(--blue);border-color:var(--blue);color:white}
+.spell-slot.correct{background:var(--green);border-color:var(--green);color:white;animation:boing .3s ease}
+.spell-slot.wrong{background:var(--red);border-color:var(--red);color:white;animation:shake .3s ease}
+.spell-letters{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;flex-shrink:0}
+.spell-letter{width:clamp(34px,8vw,44px);height:clamp(40px,9vw,52px);background:white;border-radius:9px;border:3px solid var(--blue);font-size:clamp(16px,4vw,21px);font-weight:800;font-family:var(--font);color:var(--blue);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 rgba(59,130,246,.3);transition:all .18s}
+.spell-letter:active{transform:translateY(2px)}
+.spell-letter.used{opacity:.22;pointer-events:none}
+.spell-feedback{text-align:center;font-size:18px;font-weight:800;min-height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.spell-actions{display:flex;gap:10px;justify-content:center;flex-shrink:0}
+.btn-erase{background:#FEF2F2;color:var(--red);border:none;border-radius:100px;padding:11px 22px;font-size:16px;font-weight:800;font-family:var(--font);cursor:pointer;box-shadow:var(--shadow-sm)}
+.btn-validate{background:var(--green);color:white;border:none;border-radius:100px;padding:11px 26px;font-size:16px;font-weight:800;font-family:var(--font);cursor:pointer;box-shadow:0 4px 0 rgba(34,197,94,.3)}
+.btn-validate:disabled{opacity:.38;pointer-events:none}
+#results{background:linear-gradient(145deg,#FFD93D,#FF6B35);align-items:center;justify-content:center;gap:18px;text-align:center}
+.res-trophy{font-size:80px;animation:trophyIn .7s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes trophyIn{from{transform:scale(0) rotate(-20deg)}to{transform:scale(1) rotate(0)}}
+.res-title{font-size:clamp(28px,7vw,50px);font-weight:800;color:white;text-shadow:0 3px 0 rgba(0,0,0,.12)}
+.res-stars{font-size:34px;letter-spacing:6px}
+.res-score{font-size:19px;font-weight:600;color:rgba(255,255,255,.95)}
+.conf{position:fixed;pointer-events:none;z-index:9999;width:10px;height:10px;border-radius:2px;animation:confFall linear forwards}
+@keyframes confFall{from{transform:translateY(-20px) rotate(0);opacity:1}to{transform:translateY(105vh) rotate(600deg);opacity:0}}
+@media(min-width:600px){.modes-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:360px){.modes-grid{grid-template-columns:1fr}.quiz-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div id="starBadge">&#11088; <span id="starCount">0</span></div>
+
+<!-- HOME -->
+<div class="screen active" id="home">
+  <div class="float-anim" style="font-size:46px">&#127775;&#10024;&#127775;</div>
+  <div class="home-big">Bonjour<br>Paul ! &#128075;</div>
+  <div class="home-sub">Apprends l&#39;anglais en t&#39;amusant !</div>
+  <div class="cats-row">
+    <span class="cat-badge">&#128085; V&#234;tements</span>
+    <span class="cat-badge">&#128083; Accessoires</span>
+    <span class="cat-badge">&#128106; Famille</span>
+    <span class="cat-badge">&#128170; Corps</span>
+  </div>
+  <div class="progress-row">
+    <div class="progress-label" id="progLabel">0 / 39 mots appris</div>
+    <div class="progress-track"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+  <button class="btn btn-xl" onclick="go('modes')">&#127918; JOUER !</button>
+</div>
+
+<!-- MODES -->
+<div class="screen" id="modes">
+  <button class="btn btn-back" onclick="go('home')">&#8592; Accueil</button>
+  <div style="font-size:clamp(18px,4.5vw,26px);font-weight:800;text-align:center">&#127918; Choisir un jeu</div>
+  <div class="modes-cat-sel" id="catSel">
+    <button class="cat-btn active" onclick="setCat('Tous')">Tous (39)</button>
+    <button class="cat-btn" onclick="setCat('Vetements')">&#128085; V&#234;tements</button>
+    <button class="cat-btn" onclick="setCat('Accessoires')">&#128083; Accessoires</button>
+    <button class="cat-btn" onclick="setCat('Famille')">&#128106; Famille</button>
+    <button class="cat-btn" onclick="setCat('Corps')">&#128170; Corps</button>
+  </div>
+  <div class="modes-grid">
+    <div class="mode-tile m1" onclick="startFlash()"><span class="ico">&#127183;</span><span class="name">Cartes Flash</span><span class="desc">Retourne &#183; swipe &#8592; &#8594;</span></div>
+    <div class="mode-tile m2" onclick="startQuiz(false)"><span class="ico">&#127919;</span><span class="name">Quiz</span><span class="desc">Bonne r&#233;ponse parmi 4</span></div>
+    <div class="mode-tile m3" onclick="startMemory()"><span class="ico">&#129504;</span><span class="name">M&#233;moire</span><span class="desc">Retrouve les paires</span></div>
+    <div class="mode-tile m4" onclick="startMatch()"><span class="ico">&#128279;</span><span class="name">Association</span><span class="desc">Relie mot + image</span></div>
+    <div class="mode-tile m5" onclick="startSpelling()"><span class="ico">&#9999;&#65039;</span><span class="name">&#201;pellation</span><span class="desc">Forme le mot lettre par lettre</span></div>
+    <div class="mode-tile m6" onclick="startQuiz(true)"><span class="ico">&#9889;</span><span class="name">Challenge</span><span class="desc">Quiz sur tous les mots !</span></div>
+  </div>
+</div>
+
+<!-- FLASHCARD -->
+<div class="screen" id="flashcard">
+  <button class="btn btn-back" onclick="go('modes')">&#8592; Retour</button>
+  <div class="fc-counter" id="fcCtr">1 / ?</div>
+  <div class="fc-cat-tag" id="fcCatTag">VETEMENTS</div>
+  <div class="fc-area">
+    <div class="fc-wrap" id="fcWrap" onclick="flipFlash()">
+      <div class="fc-inner" id="fcInner">
+        <div class="fc-face fc-front">
+          <span class="fc-emoji" id="fcEmoji"></span>
+          <span class="fc-word-en" id="fcEn"></span>
+          <span class="fc-phon" id="fcPhon"></span>
+          <span class="fc-hint">&#128070; Appuie pour voir en fran&#231;ais</span>
+        </div>
+        <div class="fc-face fc-back">
+          <span class="fc-badge">&#127467;&#127479; Fran&#231;ais</span>
+          <span class="fc-emoji" id="fcEmoji2"></span>
+          <span class="fc-word-fr" id="fcFr"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="fc-sound-row">
+    <button class="btn btn-sound" onclick="spkEn()">&#128266; Anglais</button>
+    <button class="btn btn-sound" style="background:var(--purple)" onclick="spkFr()">&#128266; Fran&#231;ais</button>
+  </div>
+  <div class="fc-controls">
+    <button class="btn btn-nav" id="fcPrev" onclick="fcMove(-1)">&#11013;&#65039;</button>
+    <span style="font-size:13px;color:var(--mid);font-weight:600">Swipe &#8592; &#8594;</span>
+    <button class="btn btn-nav" id="fcNext" onclick="fcMove(1)">&#10145;&#65039;</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="quiz">
+  <button class="btn btn-back" onclick="go('modes')">&#8592; Retour</button>
+  <div class="quiz-header">
+    <span class="quiz-prog" id="qProg">1/10</span>
+    <span class="quiz-score-disp" id="qScore">&#11088; 0</span>
+  </div>
+  <div class="quiz-q-card">
+    <span class="quiz-q-label">Comment dit-on en anglais ?</span>
+    <button class="btn btn-sound" style="align-self:flex-end;font-size:13px;padding:7px 13px" onclick="spkCurrentQ()">&#128266;</button>
+    <span class="quiz-q-emoji" id="qEmoji"></span>
+    <span class="quiz-q-word" id="qWord"></span>
+  </div>
+  <div class="quiz-grid" id="qGrid"></div>
+  <div class="quiz-feedback" id="qFeedback"></div>
+</div>
+
+<!-- MEMORY -->
+<div class="screen" id="memory">
+  <button class="btn btn-back" onclick="go('modes')">&#8592; Retour</button>
+  <div style="font-size:clamp(18px,4vw,22px);font-weight:800;text-align:center">&#129504; Jeu de M&#233;moire</div>
+  <div class="mem-info">
+    <span id="mPairs">Paires : 0 / 8</span>
+    <span id="mMoves">Essais : 0</span>
+  </div>
+  <div class="mem-grid" id="mGrid"></div>
+</div>
+
+<!-- MATCH -->
+<div class="screen" id="match">
+  <button class="btn btn-back" onclick="go('modes')">&#8592; Retour</button>
+  <div class="match-header">
+    <span class="match-title">&#128279; Association</span>
+    <span class="match-score" id="matchScore">0 / 6</span>
+  </div>
+  <div class="match-cols">
+    <div class="match-col">
+      <div class="match-col-label">&#127468;&#127463; Mot</div>
+      <div id="matchWords" style="display:flex;flex-direction:column;gap:7px"></div>
+    </div>
+    <div class="match-col">
+      <div class="match-col-label">Image</div>
+      <div id="matchImgs" style="display:flex;flex-direction:column;gap:7px"></div>
+    </div>
+  </div>
+  <div class="match-feedback" id="matchFb"></div>
+</div>
+
+<!-- SPELLING -->
+<div class="screen" id="spelling">
+  <button class="btn btn-back" onclick="go('modes')">&#8592; Retour</button>
+  <div class="spell-header">
+    <span class="spell-prog" id="spProg">1/10</span>
+    <span class="spell-score" id="spScore">&#11088; 0</span>
+  </div>
+  <div class="spell-card">
+    <button class="btn btn-sound" style="align-self:flex-end;font-size:13px;padding:7px 13px" onclick="spkSpell()">&#128266;</button>
+    <span class="spell-emoji" id="spEmoji"></span>
+    <span class="spell-fr" id="spFr"></span>
+    <span class="spell-hint">Forme le mot en anglais &#128071;</span>
+  </div>
+  <div class="spell-slots" id="spSlots"></div>
+  <div class="spell-letters" id="spLetters"></div>
+  <div class="spell-feedback" id="spFeedback"></div>
+  <div class="spell-actions">
+    <button class="btn-erase" onclick="spErase()">&#9003; Effacer</button>
+    <button class="btn-validate" id="spValidate" onclick="spCheck()" disabled>&#9989; Valider</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="results">
+  <div class="res-trophy" id="rTrophy">&#127942;</div>
+  <div class="res-title" id="rTitle">Bravo Paul !</div>
+  <div class="res-stars" id="rStars">&#11088;&#11088;&#11088;</div>
+  <div class="res-score" id="rScore"></div>
+  <button class="btn btn-xl" onclick="replayLast()">&#128260; Rejouer</button>
+  <button class="btn btn-white" style="margin-top:6px" onclick="go('modes')">&#127918; Autre jeu</button>
+  <button class="btn btn-white" style="margin-top:4px;background:rgba(255,255,255,.5)" onclick="go('home')">&#127968; Accueil</button>
+</div>
+
+<script>
+// ===== VOCABULARY =====
+// Emojis stored as Unicode code points to avoid encoding issues
+var V = [
+  // TOPS, BOTTOMS AND SHOES
+  {id:1,  e:"\uD83D\uDC54", en:"Shirt",      fr:"Chemise",           ph:"/\u0283\u025C\u02D0rt/",       cat:"Vetements"},
+  {id:2,  e:"\uD83D\uDC55", en:"T-shirt",    fr:"T-shirt",           ph:"/ti\u02D0\u0283\u025C\u02D0rt/",cat:"Vetements"},
+  {id:3,  e:"\uD83D\uDC57", en:"Dress",      fr:"Robe",              ph:"/dr\u025Bs/",                   cat:"Vetements"},
+  {id:4,  e:"\uD83E\uDDE5", en:"Jacket",     fr:"Veste",             ph:"/\u02C8d\u0292\xE6k\u026At/",  cat:"Vetements"},
+  {id:5,  e:"\uD83D\uDC5A", en:"Jumper",     fr:"Pull",              ph:"/\u02C8d\u0292\u028Amp\u0259r/",cat:"Vetements"},
+  {id:6,  e:"\uD83D\uDC56", en:"Jeans",      fr:"Jean",              ph:"/d\u0292i\u02D0nz/",            cat:"Vetements"},
+  {id:7,  e:"\uD83E\uDDE6", en:"Socks",      fr:"Chaussettes",       ph:"/s\u0252ks/",                   cat:"Vetements"},
+  {id:8,  e:"\uD83D\uDC83", en:"Skirt",      fr:"Jupe",              ph:"/sk\u025C\u02D0rt/",            cat:"Vetements"},
+  {id:9,  e:"\uD83E\uDE73", en:"Shorts",     fr:"Short",             ph:"/\u0283\u0254\u02D0rts/",       cat:"Vetements"},
+  {id:10, e:"\uD83D\uDC62", en:"Boots",      fr:"Bottes",            ph:"/bu\u02D0ts/",                  cat:"Vetements"},
+  {id:11, e:"\uD83D\uDC5F", en:"Trainers",   fr:"Baskets",           ph:"/\u02C8tre\u026An\u0259rz/",   cat:"Vetements"},
+  // ACCESSORIES
+  {id:12, e:"\uD83D\uDC53", en:"Glasses",    fr:"Lunettes",          ph:"/\u02C8\u0261l\xE6s\u026Az/",  cat:"Accessoires"},
+  {id:13, e:"\uD83D\uDCDF", en:"Bracelet",   fr:"Bracelet",          ph:"/\u02C8bre\u026Asl\u026At/",   cat:"Accessoires"},
+  {id:14, e:"\uD83E\uDDE2", en:"Hat",        fr:"Chapeau",           ph:"/h\xE6t/",                      cat:"Accessoires"},
+  {id:15, e:"\uD83D\uDD76\uFE0F", en:"Sunglasses", fr:"Lunettes de soleil", ph:"/\u02C8s\u028An\u0261l\xE6s\u026Az/", cat:"Accessoires"},
+  {id:16, e:"\uD83C\uDF92", en:"Backpack",   fr:"Sac \xE0 dos",      ph:"/\u02C8b\xE6kp\xE6k/",         cat:"Accessoires"},
+  {id:17, e:"\uD83E\uDD78", en:"Moustache",  fr:"Moustache",         ph:"/m\u0259\u02C8st\xE6\u0283/",  cat:"Accessoires"},
+  {id:18, e:"\uD83E\uDDD4", en:"Beard",      fr:"Barbe",             ph:"/b\u026A\u0259rd/",             cat:"Accessoires"},
+  {id:19, e:"\u231A",       en:"Watch",      fr:"Montre",            ph:"/w\u0252t\u0283/",              cat:"Accessoires"},
+  // FAMILY
+  {id:20, e:"\uD83D\uDC69", en:"Mom",        fr:"Maman",             ph:"/m\u0252m/",                    cat:"Famille"},
+  {id:21, e:"\uD83D\uDC68", en:"Dad",        fr:"Papa",              ph:"/d\xE6d/",                      cat:"Famille"},
+  {id:22, e:"\uD83D\uDC6B", en:"Parents",    fr:"Parents",           ph:"/\u02C8p\u025B\u0259r\u0259nts/",cat:"Famille"},
+  {id:23, e:"\uD83D\uDC66", en:"Son",        fr:"Fils",              ph:"/s\u028An/",                    cat:"Famille"},
+  {id:24, e:"\uD83D\uDC67", en:"Daughter",   fr:"Fille",             ph:"/\u02C8d\u0254\u02D0t\u0259r/", cat:"Famille"},
+  {id:25, e:"\uD83D\uDC71\u200D\u2642\uFE0F", en:"Brother", fr:"Fr\xE8re", ph:"/\u02C8br\u028C\u00F0\u0259r/", cat:"Famille"},
+  {id:26, e:"\uD83D\uDC6D", en:"Sister",     fr:"S\u0153ur",         ph:"/\u02C8s\u026Ast\u0259r/",      cat:"Famille"},
+  {id:27, e:"\uD83D\uDC69\u200D\uD83E\uDDB3", en:"Aunt", fr:"Tante", ph:"/\u0251\u02D0nt/",             cat:"Famille"},
+  {id:28, e:"\uD83D\uDC68\u200D\uD83E\uDDB3", en:"Uncle", fr:"Oncle", ph:"/\u02C8\u028A\u014Bk\u0259l/",cat:"Famille"},
+  {id:29, e:"\uD83E\uDDD2", en:"Children",   fr:"Enfants",           ph:"/\u02C8t\u0283\u026Aldr\u0259n/",cat:"Famille"},
+  // BODY
+  {id:30, e:"\uD83D\uDCCF", en:"Tall",       fr:"Grand(e)",          ph:"/t\u0254\u02D0l/",              cat:"Corps"},
+  {id:31, e:"\uD83E\uDD0F", en:"Short",      fr:"Petit(e)",          ph:"/\u0283\u0254\u02D0rt/",        cat:"Corps"},
+  {id:32, e:"\uD83E\uDDD8", en:"Slim",       fr:"Mince",             ph:"/sl\u026Am/",                   cat:"Corps"},
+  {id:33, e:"\uD83D\uDC4D", en:"Fat",        fr:"Gros / Grosse",     ph:"/f\xE6t/",                      cat:"Corps"},
+  {id:34, e:"\uD83D\uDC40", en:"Eyes",       fr:"Yeux",              ph:"/a\u026Az/",                    cat:"Corps"},
+  {id:35, e:"\uD83D\uDC87", en:"Hair",       fr:"Cheveux",           ph:"/h\u025B\u0259r/",              cat:"Corps"},
+  {id:36, e:"\uD83D\uDC44", en:"Mouth",      fr:"Bouche",            ph:"/ma\u028A\u03B8/",              cat:"Corps"},
+  {id:37, e:"\uD83E\uDDB5", en:"Legs",       fr:"Jambes",            ph:"/l\u025B\u0261z/",              cat:"Corps"},
+  {id:38, e:"\uD83D\uDC64", en:"Head",       fr:"T\xEAte",           ph:"/h\u025Bd/",                    cat:"Corps"},
+  {id:39, e:"\uD83D\uDCAA", en:"Arms",       fr:"Bras",              ph:"/\u0251\u02D0rmz/",             cat:"Corps"}
+];
+
+var TOTAL = V.length;
+
+// ===== SPEECH =====
+var voiceEn=null, voiceFr=null;
+function loadVoices(){
+  var vv=speechSynthesis.getVoices();
+  var enPrio=['Samantha','Karen','Moira','Daniel','Google UK English Female','Google US English','Ava','Alex'];
+  for(var n of enPrio){var v=vv.find(function(v){return v.name===n});if(v){voiceEn=v;break}}
+  if(!voiceEn) voiceEn=vv.find(function(v){return /en-(GB|AU)/i.test(v.lang)})||vv.find(function(v){return /en-US/i.test(v.lang)})||vv.find(function(v){return /^en/i.test(v.lang)})||null;
+  voiceFr=vv.find(function(v){return /fr-(FR|BE|CA)/i.test(v.lang)})||vv.find(function(v){return /^fr/i.test(v.lang)})||null;
+}
+if('onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged=loadVoices;
+loadVoices(); setTimeout(loadVoices,500);
+
+function speak(text,lang,slow){
+  if(!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(text);
+  u.lang=lang; u.rate=slow?0.62:0.82; u.pitch=1.05; u.volume=1;
+  if(lang.startsWith('en')&&voiceEn) u.voice=voiceEn;
+  if(lang.startsWith('fr')&&voiceFr) u.voice=voiceFr;
+  setTimeout(function(){speechSynthesis.speak(u)},90);
+}
+
+// ===== STATE =====
+var stars=0, mastered=new Set();
+var activeCat='Tous';
+var fcList=[], fcIdx=0, fcFlipped=false;
+var qList=[], qIdx=0, qOk=0, qAnswered=false, qChallenge=false, qCurrent=null;
+var mWords=[], mTiles=[], mOpen=[], mMatched=0, mMoves_=0, mLock=false;
+var matchWordsList=[], matchSel=null, matchSelType=null, matchOk=0, matchTotal=0;
+var spList=[], spIdx=0, spOk=0, spAnswer=[], spLetters_=[], spAnswered=false;
+var lastMode='';
+
+function getPool(){
+  if(activeCat==='Tous') return V;
+  return V.filter(function(v){return v.cat===activeCat});
+}
+function setCat(cat){
+  activeCat=cat;
+  document.querySelectorAll('.cat-btn').forEach(function(b){
+    var label=b.textContent.trim();
+    b.classList.toggle('active',
+      (cat==='Tous' && label.startsWith('Tous')) ||
+      (cat!=='Tous' && label.indexOf(cat.replace('Vetements','tements'))>=0) ||
+      label===cat
+    );
+  });
+}
+function go(name){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+  document.getElementById(name).classList.add('active');
+  syncUI();
+}
+function syncUI(){
+  document.getElementById('progLabel').textContent=mastered.size+' / '+TOTAL+' mots appris';
+  document.getElementById('progFill').style.width=(mastered.size/TOTAL*100)+'%';
+  document.getElementById('starCount').textContent=stars;
+}
+function addStars(n){
+  stars+=n; syncUI();
+  var b=document.getElementById('starBadge');
+  b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
+}
+function replayLast(){
+  if(lastMode==='flash') startFlash();
+  else if(lastMode==='quiz') startQuiz(qChallenge);
+  else if(lastMode==='memory') startMemory();
+  else if(lastMode==='match') startMatch();
+  else if(lastMode==='spelling') startSpelling();
+  else go('modes');
+}
+function shuffle(a){return[].concat(a).sort(function(){return Math.random()-.5})}
+
+// ===== CONFETTI =====
+function confetti(n){
+  n=n||28;
+  var cols=['#FFD93D','#FF6B35','#4ECDC4','#8B5CF6','#F472B6','#3B82F6','#22C55E'];
+  for(var i=0;i<n;i++){
+    var d=document.createElement('div'); d.className='conf';
+    d.style.left=(Math.random()*100)+'vw'; d.style.top='-14px';
+    d.style.background=cols[Math.floor(Math.random()*cols.length)];
+    d.style.animationDuration=(1.2+Math.random()*1.2)+'s';
+    d.style.animationDelay=(Math.random()*.5)+'s';
+    document.body.appendChild(d);
+    setTimeout(function(el){return function(){el.remove()}}(d),2600);
+  }
+}
+
+// ===== FLASHCARDS =====
+function startFlash(){
+  lastMode='flash';
+  fcList=getPool();
+  if(!fcList.length){alert('Aucun mot dans cette cat\xE9gorie !');return}
+  fcIdx=0; fcFlipped=false; renderFlash(); go('flashcard');
+}
+function renderFlash(){
+  var w=fcList[fcIdx];
+  document.getElementById('fcEmoji').textContent=w.e;
+  document.getElementById('fcEmoji2').textContent=w.e;
+  document.getElementById('fcEn').textContent=w.en;
+  document.getElementById('fcFr').textContent=w.fr;
+  document.getElementById('fcPhon').textContent=w.ph;
+  document.getElementById('fcCtr').textContent=(fcIdx+1)+' / '+fcList.length;
+  document.getElementById('fcCatTag').textContent=w.cat.toUpperCase();
+  document.getElementById('fcPrev').disabled=(fcIdx===0);
+  document.getElementById('fcNext').disabled=(fcIdx===fcList.length-1);
+  fcFlipped=false; document.getElementById('fcInner').classList.remove('flipped');
+  setTimeout(function(){speak(w.en,'en-GB',true)},400);
+}
+function flipFlash(){
+  fcFlipped=!fcFlipped;
+  document.getElementById('fcInner').classList.toggle('flipped',fcFlipped);
+  if(fcFlipped){mastered.add(fcList[fcIdx].id);syncUI();speak(fcList[fcIdx].fr,'fr-FR')}
+}
+function fcMove(dir){var ni=fcIdx+dir;if(ni>=0&&ni<fcList.length){fcIdx=ni;renderFlash()}}
+function spkEn(){speak(fcList[fcIdx].en,'en-GB',true)}
+function spkFr(){speak(fcList[fcIdx].fr,'fr-FR')}
+
+var txStart=null;
+document.getElementById('fcWrap').addEventListener('touchstart',function(e){txStart=e.touches[0].clientX},{passive:true});
+document.getElementById('fcWrap').addEventListener('touchend',function(e){
+  if(txStart===null) return;
+  var dx=e.changedTouches[0].clientX-txStart;
+  if(Math.abs(dx)>45){fcMove(dx<0?1:-1);txStart=null;return}
+  txStart=null;
+},{passive:true});
+
+// ===== QUIZ =====
+function startQuiz(challenge){
+  lastMode='quiz'; qChallenge=!!challenge;
+  var pool=getPool();
+  var n=challenge?Math.min(pool.length,20):Math.min(pool.length,10);
+  qList=shuffle(pool).slice(0,n);
+  qIdx=0; qOk=0; qAnswered=false; renderQ(); go('quiz');
+}
+function renderQ(){
+  var q=qList[qIdx]; qCurrent=q;
+  document.getElementById('qEmoji').textContent=q.e;
+  document.getElementById('qWord').textContent=q.fr;
+  document.getElementById('qProg').textContent=(qIdx+1)+'/'+qList.length;
+  document.getElementById('qScore').textContent='\u2B50 '+qOk;
+  document.getElementById('qFeedback').textContent='';
+  qAnswered=false;
+  var wrongs=shuffle(V.filter(function(v){return v.id!==q.id})).slice(0,3).map(function(v){return v.en});
+  var opts=shuffle([q.en].concat(wrongs));
+  var grid=document.getElementById('qGrid'); grid.innerHTML='';
+  opts.forEach(function(o){
+    var b=document.createElement('button'); b.className='quiz-opt'; b.textContent=o;
+    b.onclick=function(){answerQ(o,q.en,b)};
+    grid.appendChild(b);
+  });
+  setTimeout(function(){speak(q.fr,'fr-FR')},300);
+}
+function spkCurrentQ(){if(qCurrent) speak(qCurrent.fr,'fr-FR')}
+function answerQ(sel,correct,btn){
+  if(qAnswered) return; qAnswered=true;
+  document.querySelectorAll('.quiz-opt').forEach(function(b){b.disabled=true});
+  var fb=document.getElementById('qFeedback');
+  if(sel===correct){
+    btn.classList.add('correct'); qOk++; addStars(1); mastered.add(qList[qIdx].id);
+    fb.textContent='\u2705 Bravo !'; confetti(14); speak(correct,'en-GB');
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt').forEach(function(b){if(b.textContent===correct) b.classList.add('correct')});
+    fb.textContent="\u274C C'est : "+correct; speak(correct,'en-GB',true);
+  }
+  syncUI();
+  setTimeout(function(){qIdx++;if(qIdx<qList.length) renderQ();else showResults('quiz')},2100);
+}
+
+// ===== MEMORY =====
+function startMemory(){
+  lastMode='memory';
+  var pool=getPool();
+  mWords=shuffle(pool).slice(0,8);
+  mMatched=0; mMoves_=0; mOpen=[]; mLock=false;
+  var pairs=[];
+  mWords.forEach(function(w){
+    pairs.push({id:w.id,type:'img',show:w.e,pairId:w.id,word:w.en});
+    pairs.push({id:w.id,type:'txt',show:w.en,pairId:w.id,word:w.en});
+  });
+  mTiles=shuffle(pairs).map(function(t,i){return Object.assign({},t,{idx:i,revealed:false,matched:false})});
+  document.getElementById('mPairs').textContent='Paires : 0 / '+mWords.length;
+  document.getElementById('mMoves').textContent='Essais : 0';
+  renderMemory(); go('memory');
+}
+function renderMemory(){
+  var g=document.getElementById('mGrid'); g.innerHTML='';
+  mTiles.forEach(function(t,i){
+    var d=document.createElement('div'); d.className='mem-tile'; d.id='mt'+i;
+    if(t.matched){d.classList.add('done');d.innerHTML='<span>'+t.show+'</span>'}
+    else if(t.revealed){d.classList.add('open');d.innerHTML='<span>'+t.show+'</span>'}
+    else{d.innerHTML='<span class="q-icon">\u2753</span>'}
+    d.onclick=function(){tapMem(i)};
+    g.appendChild(d);
+  });
+}
+function tapMem(i){
+  if(mLock) return;
+  var t=mTiles[i];
+  if(t.matched||t.revealed||mOpen.length>=2) return;
+  t.revealed=true; mOpen.push(i);
+  var el=document.getElementById('mt'+i);
+  el.classList.add('open'); el.innerHTML='<span>'+t.show+'</span>';
+  if(t.type==='txt') speak(t.word,'en-GB');
+  if(mOpen.length===2){
+    mMoves_++;
+    var a=mTiles[mOpen[0]], b=mTiles[mOpen[1]];
+    mLock=true;
+    if(a.pairId===b.pairId&&a.type!==b.type){
+      setTimeout(function(){
+        mOpen.forEach(function(x){
+          mTiles[x].matched=true; mTiles[x].revealed=false;
+          var e=document.getElementById('mt'+x);
+          e.classList.remove('open'); e.classList.add('done');
+        });
+        mMatched++; mOpen=[]; mLock=false;
+        addStars(2); confetti(10); mastered.add(a.pairId); syncUI();
+        document.getElementById('mPairs').textContent='Paires : '+mMatched+' / '+mWords.length;
+        document.getElementById('mMoves').textContent='Essais : '+mMoves_;
+        if(mMatched===mWords.length) setTimeout(function(){showResults('mem')},700);
+      },600);
+    } else {
+      setTimeout(function(){
+        mOpen.forEach(function(x){
+          mTiles[x].revealed=false;
+          var e=document.getElementById('mt'+x);
+          e.classList.remove('open');
+          e.innerHTML='<span class="q-icon">\u2753</span>';
+        });
+        mOpen=[]; mLock=false;
+        document.getElementById('mMoves').textContent='Essais : '+mMoves_;
+      },900);
+    }
+  }
+}
+
+// ===== MATCH =====
+function startMatch(){
+  lastMode='match';
+  var pool=getPool();
+  matchWordsList=shuffle(pool).slice(0,6);
+  matchOk=0; matchTotal=matchWordsList.length;
+  matchSel=null; matchSelType=null;
+  document.getElementById('matchScore').textContent='0 / '+matchTotal;
+  document.getElementById('matchFb').textContent='';
+  var wc=document.getElementById('matchWords');
+  var ic=document.getElementById('matchImgs');
+  wc.innerHTML=''; ic.innerHTML='';
+  var sw=shuffle(matchWordsList), si=shuffle(matchWordsList);
+  sw.forEach(function(w){
+    var d=document.createElement('div'); d.className='match-item';
+    d.textContent=w.en; d.dataset.id=w.id; d.dataset.type='word';
+    d.onclick=function(){tapMatch(d,'word',w.id)};
+    wc.appendChild(d);
+  });
+  si.forEach(function(w){
+    var d=document.createElement('div'); d.className='match-item';
+    d.style.fontSize='28px'; d.textContent=w.e;
+    d.dataset.id=w.id; d.dataset.type='img';
+    d.onclick=function(){tapMatch(d,'img',w.id)};
+    ic.appendChild(d);
+  });
+  go('match');
+}
+function tapMatch(el,type,id){
+  if(el.classList.contains('ok')) return;
+  if(matchSel&&matchSelType===type){
+    document.querySelectorAll('.match-item.sel').forEach(function(e){e.classList.remove('sel')});
+    if(matchSel===el){matchSel=null;matchSelType=null;return}
+    matchSel=el; el.classList.add('sel');
+    if(type==='word'){var w=V.find(function(v){return v.id==id});if(w)speak(w.en,'en-GB')}
+    return;
+  }
+  if(!matchSel){
+    matchSel=el; matchSelType=type; el.classList.add('sel');
+    if(type==='word'){var w=V.find(function(v){return v.id==id});if(w)speak(w.en,'en-GB')}
+    return;
+  }
+  var id1=matchSelType==='word'?matchSel.dataset.id:id;
+  var id2=matchSelType==='word'?id:matchSel.dataset.id;
+  document.querySelectorAll('.match-item.sel').forEach(function(e){e.classList.remove('sel')});
+  if(id1==id2){
+    [matchSel,el].forEach(function(e){e.classList.add('ok')});
+    matchOk++; addStars(2); confetti(12); mastered.add(parseInt(id1)); syncUI();
+    document.getElementById('matchScore').textContent=matchOk+' / '+matchTotal;
+    document.getElementById('matchFb').textContent='\u2705 Parfait !';
+    var w=V.find(function(v){return v.id==id1}); if(w) speak(w.en,'en-GB');
+    if(matchOk===matchTotal) setTimeout(function(){showResults('match')},900);
+  } else {
+    [matchSel,el].forEach(function(e){e.classList.add('ko')});
+    document.getElementById('matchFb').textContent='\u274C Essaie encore !';
+    setTimeout(function(){
+      [matchSel,el].forEach(function(e){e.classList.remove('ko')});
+      document.getElementById('matchFb').textContent='';
+    },700);
+  }
+  matchSel=null; matchSelType=null;
+}
+
+// ===== SPELLING =====
+function startSpelling(){
+  lastMode='spelling';
+  var pool=getPool();
+  spList=shuffle(pool).slice(0,Math.min(10,pool.length));
+  spIdx=0; spOk=0; spAnswered=false; renderSpell(); go('spelling');
+}
+function renderSpell(){
+  var w=spList[spIdx]; spAnswer=[]; spAnswered=false;
+  document.getElementById('spEmoji').textContent=w.e;
+  document.getElementById('spFr').textContent=w.fr;
+  document.getElementById('spProg').textContent=(spIdx+1)+'/'+spList.length;
+  document.getElementById('spScore').textContent='\u2B50 '+spOk;
+  document.getElementById('spFeedback').textContent='';
+  document.getElementById('spValidate').disabled=true;
+  var target=w.en.toUpperCase().replace(/ /g,'_');
+  var chars=target.split('');
+  var realChars=chars.filter(function(c){return c!=='_'});
+  var alpha='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').filter(function(c){return realChars.indexOf(c)<0});
+  var extras=shuffle(alpha).slice(0,Math.min(4,12-realChars.length));
+  spLetters_=shuffle(realChars.concat(extras));
+  var slots=document.getElementById('spSlots'); slots.innerHTML='';
+  chars.forEach(function(c,i){
+    var s=document.createElement('div');
+    if(c==='_'){
+      s.style.cssText='width:8px;height:52px;background:transparent;border:none;display:inline-flex;align-items:center;justify-content:center;font-size:18px;color:var(--mid)';
+      s.textContent='\xB7';
+    } else {
+      s.className='spell-slot'; s.id='slot'+i;
+    }
+    slots.appendChild(s);
+  });
+  var ld=document.getElementById('spLetters'); ld.innerHTML='';
+  spLetters_.forEach(function(ch,i){
+    var b=document.createElement('div'); b.className='spell-letter';
+    b.textContent=ch; b.id='sl'+i;
+    b.onclick=function(){tapLetter(ch,i)};
+    ld.appendChild(b);
+  });
+  speak(w.fr,'fr-FR');
+  setTimeout(function(){speak(w.en,'en-GB',true)},1400);
+}
+function spkSpell(){speak(spList[spIdx].en,'en-GB',true)}
+function tapLetter(ch,lIdx){
+  if(spAnswered) return;
+  var target=spList[spIdx].en.toUpperCase().replace(/ /g,'_');
+  var chars=target.split('');
+  var filledCount=spAnswer.length;
+  var realIdx=0, slotPos=-1;
+  for(var i=0;i<chars.length;i++){
+    if(chars[i]==='_') continue;
+    if(realIdx===filledCount){slotPos=i;break}
+    realIdx++;
+  }
+  if(slotPos<0) return;
+  spAnswer.push({ch:ch,lIdx:lIdx,slotPos:slotPos});
+  var slot=document.getElementById('slot'+slotPos);
+  if(slot){slot.classList.add('filled');slot.textContent=ch}
+  document.getElementById('sl'+lIdx).classList.add('used');
+  var totalReal=chars.filter(function(c){return c!=='_'}).length;
+  document.getElementById('spValidate').disabled=(spAnswer.length!==totalReal);
+}
+function spErase(){
+  if(spAnswered||spAnswer.length===0) return;
+  var last=spAnswer.pop();
+  var slot=document.getElementById('slot'+last.slotPos);
+  if(slot){slot.classList.remove('filled');slot.textContent=''}
+  var lb=document.getElementById('sl'+last.lIdx);
+  if(lb) lb.classList.remove('used');
+  document.getElementById('spValidate').disabled=true;
+}
+function spCheck(){
+  if(spAnswered) return; spAnswered=true;
+  var target=spList[spIdx].en.toUpperCase().replace(/ /g,'');
+  var typed=spAnswer.map(function(a){return a.ch}).join('');
+  var fb=document.getElementById('spFeedback');
+  if(typed===target){
+    document.querySelectorAll('.spell-slot.filled').forEach(function(s){s.classList.remove('filled');s.classList.add('correct')});
+    spOk++; addStars(2); confetti(18); mastered.add(spList[spIdx].id); syncUI();
+    fb.textContent='\u2705 Parfait !'; speak(spList[spIdx].en,'en-GB');
+    document.getElementById('spScore').textContent='\u2B50 '+spOk;
+  } else {
+    document.querySelectorAll('.spell-slot.filled').forEach(function(s){s.classList.remove('filled');s.classList.add('wrong')});
+    fb.textContent="\u274C C'\xE9tait : "+spList[spIdx].en; speak(spList[spIdx].en,'en-GB',true);
+  }
+  setTimeout(function(){spIdx++;if(spIdx<spList.length) renderSpell();else showResults('spelling')},2300);
+}
+
+// ===== RESULTS =====
+function showResults(mode){
+  var trophy='\uD83C\uDFC6', title='Bravo Paul !', starsStr='\u2B50\u2B50\u2B50', score='';
+  if(mode==='mem'){
+    title='Jeu termin\xE9 !';
+    score=mWords.length+' paires en '+mMoves_+' essais !';
+    starsStr=mMoves_<=10?'\u2B50\u2B50\u2B50':mMoves_<=16?'\u2B50\u2B50':'\u2B50';
+  } else if(mode==='match'){
+    title='Toutes les paires !';
+    score=matchOk+' / '+matchTotal+' paires !';
+    starsStr='\u2B50\u2B50\u2B50';
+  } else if(mode==='spelling'){
+    var p=spOk/spList.length; score=spOk+' / '+spList.length+' mots !';
+    if(p>=.9){trophy='\uD83C\uDFC6';title='PARFAIT !';starsStr='\u2B50\u2B50\u2B50'}
+    else if(p>=.6){trophy='\uD83E\uDD73';title='Super Paul !';starsStr='\u2B50\u2B50'}
+    else{trophy='\uD83D\uDCAA';title='Continue !';starsStr='\u2B50'}
+  } else {
+    var p=qOk/qList.length; score=qOk+' / '+qList.length+' bonnes !';
+    if(p>=.9){trophy='\uD83C\uDFC6';title='PARFAIT !';starsStr='\u2B50\u2B50\u2B50'}
+    else if(p>=.6){trophy='\uD83E\uDD73';title='Super Paul !';starsStr='\u2B50\u2B50'}
+    else{trophy='\uD83D\uDCAA';title='Continue !';starsStr='\u2B50'}
+  }
+  document.getElementById('rTrophy').textContent=trophy;
+  document.getElementById('rTitle').textContent=title;
+  document.getElementById('rStars').textContent=starsStr;
+  document.getElementById('rScore').textContent=score;
+  confetti(42); go('results'); speak(title,'fr-FR');
+}
+
+syncUI();
+</script>
+</body>
+</html>
